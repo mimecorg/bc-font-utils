@@ -1,0 +1,41 @@
+{
+  "name": "bc-font-utils",
+  "version": "1.0.0",
+  "description": "Bulletcode font utilities",
+  "main": "src/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "exports": "./index.js",
+  "bin": {
+    "bc-build-icons": "bin/bc-build-icons.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mimecorg/bc-build-icons.git"
+  },
+  "keywords": [
+    "bulletcode",
+    "icons",
+    "fonts"
+  ],
+  "author": "Bulletcode",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mimecorg/bc-build-icons/issues"
+  },
+  "homepage": "https://github.com/mimecorg/bc-build-icons",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "oslllo-svg-fixer": "^5.0.0",
+    "svg2ttf": "^6.0.3",
+    "svgicons2svgfont": "^15.0.1",
+    "wawoff2": "^2.0.1"
+  }
+}
