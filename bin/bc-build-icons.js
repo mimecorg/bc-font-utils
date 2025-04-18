@@ -5,8 +5,9 @@ import { basename, dirname, extname } from 'path';
 
 import yaml from 'js-yaml';
 
+import { autohintTtfFont } from '../src/autohint.js';
+import { createCss, createTtfFont, createWoff2Font } from '../src/fonts.js';
 import { createSvgFont, traceSvgFiles } from '../src/svg.js';
-import { createCss, createWebFonts } from '../src/fonts.js';
 
 let configPath = null;
 let outPath = null;
@@ -42,6 +43,7 @@ async function buildIcons( configPath, outPath, rebuild ) {
   const {
     options = {},
     traceResolution = 800,
+    autohint = true,
     cssClassPrefix = 'icon',
     icons,
   } = yaml.load( await readFile( configPath, 'utf-8' ) );
@@ -67,7 +69,14 @@ async function buildIcons( configPath, outPath, rebuild ) {
 
   await createSvgFont( tempPath, glyphs, options );
 
-  await createWebFonts( tempPath, outPath, options.fontName );
+  if ( autohint ) {
+    await createTtfFont( tempPath, tempPath, options.fontName );
+    await autohintTtfFont( tempPath, outPath, options.fontName );
+  } else {
+    await createTtfFont( tempPath, outPath, options.fontName );
+  }
+
+  await createWoff2Font( outPath, outPath, options.fontName );
 
   await createCss( outPath, glyphs, options.fontName, cssClassPrefix );
 }

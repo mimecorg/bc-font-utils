@@ -4,18 +4,22 @@ import { join } from 'path';
 import svg2ttf from 'svg2ttf';
 import { compress } from 'wawoff2';
 
-export async function createWebFonts( sourcePath, targetPath, fontName ) {
-  const svfFontString = await readFile( join( sourcePath, `${fontName}.svg` ), 'utf-8' );
-
+export async function createTtfFont( sourcePath, targetPath, fontName ) {
   console.log( 'generating TTF font...' );
+
+  const svfFontString = await readFile( join( sourcePath, `${fontName}.svg` ), 'utf-8' );
 
   const ttf = svg2ttf( svfFontString );
 
   await writeFile( join( targetPath, `${fontName}.ttf` ), Buffer.from( ttf.buffer ) );
+}
 
+export async function createWoff2Font( sourcePath, targetPath, fontName ) {
   console.log( 'generating WOFF2 font...' );
 
-  const woff2 = await compress( ttf.buffer );
+  const ttf = await readFile( join( sourcePath, `${fontName}.ttf` ) );
+
+  const woff2 = await compress( ttf );
 
   await writeFile( join( targetPath, `${fontName}.woff2` ), Buffer.from( woff2 ) );
 }
