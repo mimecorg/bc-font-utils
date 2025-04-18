@@ -15,12 +15,15 @@ When the `--rebuild` option is specified, cached SVG images are re-generated eve
 
 Currently the tool can import SVG icons from the [lucide-static](https://lucide.dev/guide/packages/lucide-static) package. It can be used to create a customized version of the static icon fonts which contain only icons which are needed.
 
-The tool uses the following packages:
+The following modules and tools are used:
 
  - [oslllo-svg-fixer](https://github.com/oslllo/svg-fixer) - to trace input SVG images to single path SVG images suitable for using in fonts
  - [svgicons2svgfont](https://github.com/nfroidure/svgicons2svgfont) - to convert individual SVG images to a SVG icon file
  - [svg2tiff](https://github.com/fontello/svg2ttf) - to convert the SVG icon file to a TTF font
+ - [ttfautohint](https://freetype.org/ttfautohint/) - to generate automatic hinting for the TTF font
  - [wawoff2](https://github.com/fontello/wawoff2) - to compress the TTF font to WOFF2 format
+
+On Windows, the `ttfautohint.exe` binary included in this package is used. On other platforms, `ttfautohint` must be installed and available in the `PATH`.
 
 
 ## Configuration
@@ -36,6 +39,8 @@ options:
 
 traceResolution: 800
 
+autohint: true
+
 cssClassPrefix: icon
 
 icons:
@@ -50,4 +55,10 @@ The configuration file should use the YAML format. It must contain at least the 
 
  - `options` are described in the [svgicons2svgfont API documentation](https://github.com/nfroidure/svgicons2svgfont?tab=readme-ov-file#api); the `fontName` is also used as the file name for generated files
  - `traceResolution` is the resolution used for tracing single path SVG images
+ - `autohint` enables or disables automatic hinting
  - `cssClassPrefix` is used in the generated CSS file (defaults to `icon`)
+
+
+## Credits
+
+Portions of this software are copyright (C) 2021 [The FreeType Project](https://www.freetype.org). All rights reserved.
