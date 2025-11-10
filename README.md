@@ -1,6 +1,6 @@
 # Bulletcode font utilities
 
-A collection of tools for creating web fonts from SVG images.
+A collection of tools for creating and converting web fonts.
 
 
 ## Commands
@@ -25,10 +25,16 @@ The following modules and tools are used:
 
 On Windows, the `ttfautohint.exe` binary included in this package is used. On other platforms, `ttfautohint` must be installed and available in the `PATH`.
 
+```
+bc-build-icons CONFIG IN_PATH [OUT_PATH]
+```
+
+Convert TTF fonts to WOFF2 fonts with automatic hinting using the given configuration file. The input path containing TTF files must be specified. The output path is optional and it defaults to the directory in which the configuration file is located.
+
 
 ## Configuration
 
-Example configuration file:
+Example configuration file for `bc-build-icons`:
 
 ```yaml
 options:
@@ -40,6 +46,8 @@ options:
 traceResolution: 800
 
 autohint: true
+
+outputTTF: false
 
 cssClassPrefix: icon
 
@@ -56,7 +64,28 @@ The configuration file should use the YAML format. It must contain at least the 
  - `options` are described in the [svgicons2svgfont API documentation](https://github.com/nfroidure/svgicons2svgfont?tab=readme-ov-file#api); the `fontName` is also used as the file name for generated files
  - `traceResolution` is the resolution used for tracing single path SVG images
  - `autohint` enables or disables automatic hinting
+ - `outputTTF` can be set to `true` to keep the TTF file in the output directory
  - `cssClassPrefix` is used in the generated CSS file (defaults to `icon`)
+
+Example configuration file for `bc-convert-fonts`:
+
+```yaml
+autohint: true
+
+outputTTF: false
+
+fonts:
+  noto-sans-400: NotoSans-Regular
+  noto-sans-400-italic: NotoSans-Italic
+  noto-sans-700: NotoSans-Bold
+  noto-sans-700-italic: NotoSans-BoldItalic
+  ...
+```
+
+The configuration file must contain a mapping between output file names and input file names. Other parameters are optional.
+
+ - `autohint` enables or disables automatic hinting
+ - `outputTTF` can be set to `true` to keep the TTF files in the output directory
 
 
 ## Credits
