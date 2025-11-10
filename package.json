@@ -9,7 +9,8 @@
   },
   "exports": "./index.js",
   "bin": {
-    "bc-build-icons": "bin/bc-build-icons.js"
+    "bc-build-icons": "bin/bc-build-icons.js",
+    "bc-convert-fonts": "bin/bc-convert-fonts.js"
   },
   "files": [
     "bin",
