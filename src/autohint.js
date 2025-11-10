@@ -5,15 +5,12 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname( fileURLToPath( import.meta.url ) );
 
-export async function autohintTtfFont( sourcePath, targetPath, fontName ) {
+export async function autohintTtfFont( sourcePath, targetPath ) {
   console.log( 'autohinting TTF font...' );
 
   const ttfautohintPaht = await findTtfautohintPath();
 
-  const input = join( sourcePath, `${fontName}.ttf` );
-  const output = join( targetPath, `${fontName}.ttf` );
-
-  await spawnProcess( ttfautohintPaht, [ '--symbol', '--stem-width-mode=sss', input, output ] );
+  await spawnProcess( ttfautohintPaht, [ '--symbol', '--stem-width-mode=sss', sourcePath, targetPath ] );
 }
 
 async function findTtfautohintPath() {

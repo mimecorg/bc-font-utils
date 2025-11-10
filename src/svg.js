@@ -32,7 +32,7 @@ export function createSvgFont( targetPath, glyphs, options ) {
       ...options,
     } );
 
-    svgFontStream.pipe( createWriteStream( join( targetPath, `${options.fontName}.svg` ) ) )
+    svgFontStream.pipe( createWriteStream( targetPath ) )
       .on( 'finish', resolve )
       .on( 'error', reject );
 

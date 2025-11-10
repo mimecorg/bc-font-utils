@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { mkdir, readFile } from 'fs/promises';
-import { basename, dirname, extname } from 'path';
+import { mkdir, readFile, rm } from 'fs/promises';
+import { basename, dirname, extname, join } from 'path';
 
 import yaml from 'js-yaml';
 
@@ -10,7 +10,7 @@ import { createCss, createTtfFont, createWoff2Font } from '../src/fonts.js';
 import { createSvgFont, traceSvgFiles } from '../src/svg.js';
 
 let configPath = null;
-let outPath = null;
+let targetPath = null;
 let rebuild = false;
 
 for ( let i = 2; i < process.argv.length; i++ ) {
@@ -23,8 +23,8 @@ for ( let i = 2; i < process.argv.length; i++ ) {
     default:
       if ( arg[ 0 ] != '-' && configPath == null )
         configPath = arg;
-      else if ( arg[ 0 ] != '-' && configPath != null && outPath == null )
-        outPath = arg;
+      else if ( arg[ 0 ] != '-' && configPath != null && targetPath == null )
+        targetPath = arg;
       else
         help();
       break;
@@ -34,16 +34,17 @@ for ( let i = 2; i < process.argv.length; i++ ) {
 if ( configPath == null )
   help();
 
-if ( outPath == null )
-  outPath = dirname( configPath );
+if ( targetPath == null )
+  targetPath = dirname( configPath );
 
-await buildIcons( configPath, outPath, rebuild );
+await buildIcons( configPath, targetPath, rebuild );
 
-async function buildIcons( configPath, outPath, rebuild ) {
+async function buildIcons( configPath, targetPath, rebuild ) {
   const {
     options = {},
     traceResolution = 800,
     autohint = true,
+    outputTTF = false,
     cssClassPrefix = 'icon',
     icons,
   } = yaml.load( await readFile( configPath, 'utf-8' ) );
@@ -76,18 +77,29 @@ async function buildIcons( configPath, outPath, rebuild ) {
 
   await traceSvgFiles( 'node_modules/lucide-static/icons', tempPath, glyphs, options.fontName, rebuild, traceResolution );
 
-  await createSvgFont( tempPath, glyphs, options );
+  const svgFontPath = join( tempPath, `${options.fontName}.svg` );
+  const ttfFontPath = join( outputTTF ? targetPath : tempPath, `${options.fontName}.ttf` );
+  const woff2FontPath = join( targetPath, `${options.fontName}.woff2` );
+  const cssPath = join( targetPath, `${options.fontName}.css` );
+
+  await createSvgFont( svgFontPath, glyphs, options );
 
   if ( autohint ) {
-    await createTtfFont( tempPath, tempPath, options.fontName );
-    await autohintTtfFont( tempPath, outPath, options.fontName );
+    const tempFontPath = join( tempPath, `${options.fontName}.tmp.ttf` );
+    await createTtfFont( svgFontPath, tempFontPath );
+    await rm( svgFontPath );
+    await autohintTtfFont( tempFontPath, ttfFontPath );
+    await rm( tempFontPath );
   } else {
-    await createTtfFont( tempPath, outPath, options.fontName );
+    await createTtfFont( svgFontPath, ttfFontPath );
+    await rm( svgFontPath );
   }
 
-  await createWoff2Font( outPath, outPath, options.fontName );
+  await createWoff2Font( ttfFontPath, woff2FontPath );
+  if ( !outputTTF )
+    await rm( ttfFontPath );
 
-  await createCss( outPath, glyphs, options.fontName, cssClassPrefix );
+  await createCss( cssPath, glyphs, cssClassPrefix );
 }
 
 function help() {
