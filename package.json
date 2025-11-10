@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mimecorg/bc-build-icons.git"
+    "url": "git+https://github.com/mimecorg/bc-font-utils.git"
   },
   "keywords": [
     "bulletcode",
@@ -30,9 +30,9 @@
   "author": "Bulletcode",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mimecorg/bc-build-icons/issues"
+    "url": "https://github.com/mimecorg/bc-font-utils/issues"
   },
-  "homepage": "https://github.com/mimecorg/bc-build-icons",
+  "homepage": "https://github.com/mimecorg/bc-font-utils",
   "dependencies": {
     "js-yaml": "^4.1.0",
     "oslllo-svg-fixer": "^5.0.0",
