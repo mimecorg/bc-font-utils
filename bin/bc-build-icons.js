@@ -53,7 +53,16 @@ async function buildIcons( configPath, outPath, rebuild ) {
 
   const info = JSON.parse( await readFile( 'node_modules/lucide-static/font/info.json', 'utf-8' ) );
 
-  const glyphs = icons.map( icon => ( {
+  const availableIcons = icons.filter( icon => {
+    if ( info[ icon ] != null ) {
+      return true;
+    } else {
+      console.log( `Warning: unknown icon "${icon}"` );
+      return false;
+    }
+  } );
+
+  const glyphs = availableIcons.map( icon => ( {
     name: icon,
     codePoint: Number( info[ icon ].encodedCode.replace( '\\', '0x' ) ),
     path: null,
