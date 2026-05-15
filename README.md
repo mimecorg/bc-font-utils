@@ -48,6 +48,8 @@ traceResolution: 800
 autohint: true
 
 outputTTF: false
+outputWOFF2: true
+outputCSS: true
 
 cssClassPrefix: icon
 
@@ -65,6 +67,8 @@ The configuration file should use the YAML format. It must contain at least the 
  - `traceResolution` is the resolution used for tracing single path SVG images
  - `autohint` enables or disables automatic hinting
  - `outputTTF` can be set to `true` to keep the TTF file in the output directory
+ - `outputWOFF2` can be set to `false` to prevent generating the WOFF2 file
+ - `outputCSS` can be set to `false` to prevent generating the CSS file
  - `cssClassPrefix` is used in the generated CSS file (defaults to `icon`)
 
 Example configuration file for `bc-convert-fonts`:
