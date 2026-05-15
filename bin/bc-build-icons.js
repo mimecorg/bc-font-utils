@@ -45,9 +45,16 @@ async function buildIcons( configPath, targetPath, rebuild ) {
     traceResolution = 800,
     autohint = true,
     outputTTF = false,
+    outputWOFF2 = true,
+    outputCSS = true,
     cssClassPrefix = 'icon',
     icons,
   } = yaml.load( await readFile( configPath, 'utf-8' ) );
+
+  if ( !outputTTF && !outputWOFF2 ) {
+      console.log( 'At least one of outputTTF or outputWOFF2 must be set to true' );
+      return false;
+  }
 
   if ( options.fontName == null )
     options.fontName = basename( configPath, extname( configPath ) );
@@ -95,11 +102,13 @@ async function buildIcons( configPath, targetPath, rebuild ) {
     await rm( svgFontPath );
   }
 
-  await createWoff2Font( ttfFontPath, woff2FontPath );
+  if ( outputWOFF2 )
+    await createWoff2Font( ttfFontPath, woff2FontPath );
   if ( !outputTTF )
     await rm( ttfFontPath );
 
-  await createCss( cssPath, glyphs, cssClassPrefix );
+  if ( outputCSS )
+    await createCss( cssPath, glyphs, cssClassPrefix );
 }
 
 function help() {
