@@ -30,3 +30,11 @@ export async function createCss( path, glyphs, classPrefix ) {
 
   await writeFile( path, css.join( '' ), 'utf-8' );
 }
+
+export async function createJson( path, glyphs ) {
+  console.log( 'generating JSON file...' );
+
+  const json = "{\n  " + glyphs.map( glyph => `"${glyph.name}": "\\u${glyph.codePoint.toString( 16 )}"` ).join( ",\n  " ) + "\n}\n";
+
+  await writeFile( path, json, 'utf-8' );
+}

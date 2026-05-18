@@ -6,7 +6,7 @@ import { basename, dirname, extname, join } from 'path';
 import yaml from 'js-yaml';
 
 import { autohintTtfFont } from '../src/autohint.js';
-import { createCss, createTtfFont, createWoff2Font } from '../src/fonts.js';
+import { createCss, createJson, createTtfFont, createWoff2Font } from '../src/fonts.js';
 import { createSvgFont, traceSvgFiles } from '../src/svg.js';
 
 let configPath = null;
@@ -47,6 +47,7 @@ async function buildIcons( configPath, targetPath, rebuild ) {
     outputTTF = false,
     outputWOFF2 = true,
     outputCSS = true,
+    outputJSON = false,
     cssClassPrefix = 'icon',
     icons,
   } = yaml.load( await readFile( configPath, 'utf-8' ) );
@@ -86,8 +87,6 @@ async function buildIcons( configPath, targetPath, rebuild ) {
 
   const svgFontPath = join( tempPath, `${options.fontName}.svg` );
   const ttfFontPath = join( outputTTF ? targetPath : tempPath, `${options.fontName}.ttf` );
-  const woff2FontPath = join( targetPath, `${options.fontName}.woff2` );
-  const cssPath = join( targetPath, `${options.fontName}.css` );
 
   await createSvgFont( svgFontPath, glyphs, options );
 
@@ -102,13 +101,23 @@ async function buildIcons( configPath, targetPath, rebuild ) {
     await rm( svgFontPath );
   }
 
-  if ( outputWOFF2 )
+  if ( outputWOFF2 ) {
+    const woff2FontPath = join( targetPath, `${options.fontName}.woff2` );
     await createWoff2Font( ttfFontPath, woff2FontPath );
+  }
+
   if ( !outputTTF )
     await rm( ttfFontPath );
 
-  if ( outputCSS )
+  if ( outputCSS ) {
+    const cssPath = join( targetPath, `${options.fontName}.css` );
     await createCss( cssPath, glyphs, cssClassPrefix );
+  }
+
+  if ( outputJSON ) {
+    const jsonPath = join( targetPath, `${options.fontName}.json` );
+    await createJson( jsonPath, glyphs );
+  }
 }
 
 function help() {
