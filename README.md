@@ -50,6 +50,7 @@ autohint: true
 outputTTF: false
 outputWOFF2: true
 outputCSS: true
+outputJSON: false
 
 cssClassPrefix: icon
 
@@ -69,6 +70,7 @@ The configuration file should use the YAML format. It must contain at least the 
  - `outputTTF` can be set to `true` to keep the TTF file in the output directory
  - `outputWOFF2` can be set to `false` to prevent generating the WOFF2 file
  - `outputCSS` can be set to `false` to prevent generating the CSS file
+ - `outputJSON` can be set to `true` to generate a JSON file containing glyph mapping
  - `cssClassPrefix` is used in the generated CSS file (defaults to `icon`)
 
 Example configuration file for `bc-convert-fonts`:
