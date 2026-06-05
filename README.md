@@ -11,7 +11,7 @@ bc-build-icons [--rebuild] CONFIG [OUT_PATH]
 
 Create TTF and WOFF2 fonts from SVG icons using the given configuration file and optional output path. It defaults to the directory in which the configuration file is located. A CSS file containing icon classes (with a configurable prefix) is also generated.
 
-When the `--rebuild` option is specified, cached SVG images are re-generated even if they already exist.
+When the `--rebuild` option is specified, cached SVG images are deleted and re-generated.
 
 Currently the tool can import SVG icons from the [lucide-static](https://lucide.dev/guide/packages/lucide-static) package. It can be used to create a customized version of the static icon fonts which contain only icons which are needed.
 
