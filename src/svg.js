@@ -5,11 +5,11 @@ import { join } from 'path';
 import Svg from 'oslllo-svg-fixer/src/svg.js';
 import { SVGIcons2SVGFontStream } from 'svgicons2svgfont';
 
-export async function traceSvgFiles( sourcePath, targetPath, glyphs, fontName, rebuild, traceResolution ) {
+export async function traceSvgFiles( sourcePath, targetPath, glyphs, fontName, traceResolution ) {
   for ( const glyph of glyphs ) {
     glyph.path = join( targetPath, `${fontName}-${glyph.name}.svg` );
 
-    if ( !rebuild && existsSync( glyph.path ) )
+    if ( existsSync( glyph.path ) )
       continue;
 
     console.log( `tracing ${glyph.name}...` );

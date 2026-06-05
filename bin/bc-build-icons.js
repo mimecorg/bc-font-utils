@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mkdir, readFile, rm } from 'fs/promises';
+import { mkdir, readdir, readFile, rm } from 'fs/promises';
 import { basename, dirname, extname, join } from 'path';
 
 import yaml from 'js-yaml';
@@ -83,7 +83,14 @@ async function buildIcons( configPath, targetPath, rebuild ) {
 
   await mkdir( tempPath, { recursive: true } );
 
-  await traceSvgFiles( 'node_modules/lucide-static/icons', tempPath, glyphs, options.fontName, rebuild, traceResolution );
+  if ( rebuild ) {
+    for ( const file of await readdir( tempPath, 'utf-8' ) ) {
+      if ( file.endsWith( '.svg' ) )
+        await rm( join( tempPath, file ) );
+    }
+  }
+
+  await traceSvgFiles( 'node_modules/lucide-static/icons', tempPath, glyphs, options.fontName, traceResolution );
 
   const svgFontPath = join( tempPath, `${options.fontName}.svg` );
   const ttfFontPath = join( outputTTF ? targetPath : tempPath, `${options.fontName}.ttf` );
